@@ -1,5 +1,5 @@
 TreeHuffman
 Projeto de Estruturas de Dados
-Andressa Martins/Pedro Henrrique
+Andressa Martins/Pedro Henrique
 ===========
 
