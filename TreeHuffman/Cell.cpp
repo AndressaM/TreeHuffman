@@ -54,5 +54,5 @@ void cell::setHuffmanRepresentation(int huffman)
 
 QString cell::getHuffmanRepresentation()
 {
-    return QString(huffmanRepresentation).remove(0,1);;
+    return QString(huffmanRepresentation).remove(0,1);
 }

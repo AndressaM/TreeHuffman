@@ -1,7 +1,8 @@
 #include"File.h"
 #include<string>
 #include<QDebug>
-#define MAX_SIZE_BUCKED 200;
+
+#define MAX_SIZE_BUCKED 5;
 File::File(char FileName[])
 {
     for(int i=0; i<255; i++)
@@ -13,15 +14,19 @@ File::File(char FileName[])
     {
         inputFile.seekg(0,inputFile.end);
         size=inputFile.tellg();
-        inputFile.seekg(0);
+        inputFile.seekg(0, inputFile.beg);
     }
     this->position=0;
+    while(!this->isEnd())
+    {
+        this->grabBucked();
+    }
 }
 void File::grabBucked()
 {
     int read;
     inputFile.seekg(this->position);
-    if(size-position>200)
+    if(size-position>5)
     {
         this->position+=MAX_SIZE_BUCKED;
         read=MAX_SIZE_BUCKED;
@@ -29,10 +34,9 @@ void File::grabBucked()
     }
     else
     {
-        read=size-position-1;
+        read=size-position;
         this->isEndBool=true;
     }
-
     fileCount(read);
 }
 
@@ -94,19 +98,20 @@ void File::buildCodification(cell* node, int level = 1)
     }
 int File::trashCalculation()
 {
-    int totalbit=0;
+    int trash;
+    int numberBits=0;
     for(int i=0;i<256;i++)    {
-        totalbit += this->huffmanRepresentationArray[i].size() * this->frequency[i];
+        numberBits += this->huffmanRepresentationArray[i].size() * this->frequency[i];
     }
-    lixo=8-(totalbit%8);
-    if(lixo==8)
-        lixo=0;
-    return lixo;
+    trash=8-(numberBits%8);
+    if(trash==8)
+        trash=0;
+    return trash;
 }
 
-void File::setFileName(QString FileName)
+void File::setFileName(QString fileName)
 {
-    this->fileName=FileName;
+    this->fileName=fileName;
 }
 
 QString File::getFileName()
@@ -119,11 +124,11 @@ void File::clearPosition()
     this->isEndBool=false;
 }
 
-char* File::getfile()
+QString File::getfile()
 {
         int read;
         inputFile.seekg(this->position);
-        if(size-position>200)
+        if(size-position>5)
         {
             this->position+=MAX_SIZE_BUCKED;
             read=MAX_SIZE_BUCKED;
@@ -134,9 +139,18 @@ char* File::getfile()
             read=size-position;
             this->isEndBool=true;
         }
-        file=new char[size];
-        inputFile.read(file,read);
+        QString file;
+        char buff;
+        for(int i=0;i<read;i++)
+        {
+            inputFile.get(buff);
+            file.append(buff);
+        }
         return file;
+}
+int File::getBucked()
+{
+    return MAX_SIZE_BUCKED;
 }
 
 bool File::isEnd()

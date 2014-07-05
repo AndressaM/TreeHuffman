@@ -6,7 +6,7 @@ class cell
 {    int size;
      char element;
      char huffmanRepresentation[15];
-
+     int teste;
 public:
     bool leaf;
     cell* left;

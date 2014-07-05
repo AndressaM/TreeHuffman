@@ -49,7 +49,7 @@ void BitVector::setbit(QString value, int sizemax, int pos )
     size=pos+i+j;
 }
 
-int BitVector::bitvectorAt(int pos)
+int BitVector::bitVectorAt(int pos)
 {
     int boolReturn;
     if(biTvector.at(pos))
@@ -65,7 +65,7 @@ int BitVector::bitvectorAt(int pos)
 QString BitVector::getQbitarray(bool WithTrash)
 {
     unsigned int bit;
-    QString returnBit=QString();
+    QString bitReturn=QString();
     int i= 0;
     while(size-i>=8)
     {
@@ -85,40 +85,31 @@ QString BitVector::getQbitarray(bool WithTrash)
         }
         i=i+8;
         //qDebug()<<"bit numero "<<i<<" :"<<QString().setNum(bit,2);
-        returnBit.append(bit);
-
+        bitReturn.append(bit);
     }
     if(WithTrash)
     {
-
-
-    bit= 0;
-    for(int j= 0; j<size-i;j++ )
-    {
-        if (biTvector[i+j])
+        bit= 0;
+        for(int j= 0; j<size-i;j++ )
         {
-            bit = (bit<<1)|1;
+            if (biTvector[i+j])
+            {
+                bit = (bit<<1)|1;
+
+            }
+            else
+            {
+                bit = bit<<1;
+            }
 
         }
-        else
-        {
-            bit = bit<<1;
-        }
-
+        bit = bit<<(8-(size-i));
+        bitReturn.append(bit);
     }
-    bit = bit<<(8-(size-i));
-
-    returnBit.append(bit);
-    //qDebug()<<QString().setNum(bit,10);
-    //retornobit.remove(retornobit.size()-1,1);
-    }
-    return returnBit;
-
-
-
+    return bitReturn;
 }
 
-void BitVector::clearbitvector()
+void BitVector::clearBitVector()
 {
     biTvector.clear();
     this->biTvector.resize(2000);
@@ -129,4 +120,16 @@ int BitVector::getSize()
 {
     return this->size;
 }
-
+void BitVector::resize()
+{
+    int position=size%8;
+    QBitArray buffer;
+    buffer.resize(2000);
+    for(int i=0; i<position;i++)
+    {
+        buffer[i]=this->bitVectorAt(size-position+i);
+    }
+    biTvector.clear();
+    this->biTvector=buffer;
+    this->size=position;
+}

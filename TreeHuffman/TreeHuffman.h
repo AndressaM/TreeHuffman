@@ -1,5 +1,5 @@
-#ifndef TREEHUFFMAN_H
-#define TREEHUFFMAN_H
+#ifndef ARVOREHUFFMAN_H
+#define ARVOREHUFFMAN_H
 #include <vector>
 #include "Cell.h"
 #include<QDebug>
@@ -13,20 +13,21 @@ class TreeHuffman
     vector<cell> treeHuffman;
     cell ref;
     int size;
-    QString huffmanRepresentation;
+    QString Huffmanrepresentation;
 public:
     TreeHuffman();
     cell treeHuffmanAT(int pos);
     void setTreeHuffman(int pos, cell nil);
     int getSize();
-    void inserction(cell cellNew);
+    void insertion(cell newCell);
     void bubbleHuffman();
     void swap(cell &prev, cell &next);
     void buildHuffman();
-    void printTree(cell* node, int level = 1);
+    QString print();
     QString treeRepresetation(cell* node,QString R = "(", bool left=true);
+    void printTree(cell* node , int level = 1);
 
 
 };
 
-#endif // TREEHUFFMAN_H
+#endif // ARVOREHUFFMAN_H

@@ -19,11 +19,11 @@ SOURCES += main.cpp \
     File.cpp \
     Cell.cpp \
     main2.cpp \
-    TreeHuffman.cpp \
-    BitVector.cpp
+    BitVector.cpp \
+    TreeHuffman.cpp
 
 HEADERS += \
     File.h \
     Cell.h \
-    TreeHuffman.h \
-    BitVector.h
+    BitVector.h \
+    TreeHuffman.h

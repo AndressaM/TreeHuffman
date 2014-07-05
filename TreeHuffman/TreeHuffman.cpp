@@ -19,12 +19,12 @@ int TreeHuffman::getSize()
 {
   return size;
 }
-void TreeHuffman::inserction(cell cellNew)
+void TreeHuffman::insertion(cell newCell)
 {
-    if(cellNew.getSize()!=0 && (int)cellNew.getElement()!=10)
+    if(newCell.getSize()!=0 && (int)newCell.getElement()!=10)
     {
         size++;
-        treeHuffman[size] = cellNew;
+        treeHuffman[size] = newCell;
     }
 }
 void TreeHuffman::swap(cell &prev, cell &next)
@@ -51,7 +51,7 @@ void TreeHuffman::bubbleHuffman()
     *right=treeHuffman[size-1];
     size = size-2;
     ref= cell(left->getSize()+right->getSize(),left,right);
-    this->inserction(ref);
+    this->insertion(ref);
 }
 void TreeHuffman::buildHuffman()
 {
@@ -60,6 +60,38 @@ void TreeHuffman::buildHuffman()
         this->bubbleHuffman();
     }
 }
+
+QString TreeHuffman::print()
+{
+    return Huffmanrepresentation;
+}
+QString TreeHuffman::treeRepresetation(cell* node,QString R , bool left)
+{
+    QString returnRepresetation;
+    if(node->leaf != true)
+    {
+        returnRepresetation.append(QString("("));
+        //retorno.append(QString().setNum(node->getSize()));
+        //retorno.append(QString(","));
+        returnRepresetation.append(treeRepresetation(node->left,returnRepresetation));
+        //retorno.append(QString(","));
+        returnRepresetation.append(treeRepresetation(node->right,returnRepresetation,false));
+        if(left==false)
+            returnRepresetation.append(QString(")"));
+    }
+
+    else
+    {
+        if(node->getElement()=='(' || node->getElement()== '-' || node->getElement() == ')')
+
+            returnRepresetation.append(QString("-"));
+            returnRepresetation.append(QString(node->getElement()));
+        if(left==false)
+            returnRepresetation.append(QString(")"));
+    }
+    return returnRepresetation;
+}
+
 void TreeHuffman::printTree(cell* node , int level )
 {
     if(node->leaf != true)
@@ -74,28 +106,3 @@ void TreeHuffman::printTree(cell* node , int level )
     }
 
 }
-QString TreeHuffman:: treeRepresetation(cell* node,QString R , bool left)
-{
-    QString returnRepresentation;
-    if(node->leaf != true)
-    {
-        returnRepresentation.append(QString("("));
-        //retorno.append(QString().setNum(node->getSize()));
-        returnRepresentation.append(QString(","));
-        returnRepresentation.append(treeRepresetation(node->left,returnRepresentation));
-        returnRepresentation.append(QString(","));
-        returnRepresentation.append(treeRepresetation(node->right,returnRepresentation,false));
-        if(left==false)
-            returnRepresentation.append(QString(")"));
-    }
-
-    else
-    {
-        returnRepresentation.append(QString(node->getElement()));
-        if(left==false)
-            returnRepresentation.append(QString(")"));
-    }
-    return returnRepresentation;
-
-}
-

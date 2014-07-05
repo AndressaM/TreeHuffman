@@ -5,7 +5,6 @@ class File
 {
     std::ifstream inputFile;
     int size;
-    int lixo;
     int frequency[256];
     QString huffmanRepresentationArray[256];
     char* file;
@@ -25,10 +24,11 @@ public:
     int trashCalculation();
     void setFileName(QString fileName);
     QString getFileName();
-    char* getfile();
+    QString getfile();
     void readFile();
     void grabBucked();
     bool isEnd();
     void clearPosition();
+    int getBucked();
 };
 

@@ -12,52 +12,59 @@ using namespace std;
 
 int main()
 {
-    char file[100] = "C:/Users/Andressa/Documents/ArvoreHuffman/pedro";
+    char file[100] = "/home/pedro/ArvoreHuffman/pedro";
     TreeHuffman treeHuffman = TreeHuffman();
-    BitVector bitVector=BitVector();
     File* fileObjectInput =new File(file);
     std::ofstream fileObjectOutput;
-    while(!fileObjectInput->isEnd())
-    {
-        fileObjectInput->grabBucked();
-    }
-
-//    arquivo->ReadFile();
+    double oldPercentage=0;
     for(int i=0; i<256; i++)
     {
         cell new_cell=cell(fileObjectInput->bitToChar(i),fileObjectInput->bitFrequency(i));
-        treeHuffman.inserction(new_cell);
+        treeHuffman.insertion(new_cell);
     }
     treeHuffman.buildHuffman();
-    for(int i = 1;i<=treeHuffman.getSize();i++)
-    {
-        //qDebug()<<vetor.arvoredehuffmanAT(i).getSize();
-    }
-    cell ref=treeHuffman.treeHuffmanAT(1);
-    QString tree=treeHuffman.treeRepresetation(&ref).remove(',').remove(0,1);
+    cell rootTreeHuffman=treeHuffman.treeHuffmanAT(1);
+    QString tree=treeHuffman.treeRepresetation(&rootTreeHuffman).remove(',').remove(0,1);
     tree.remove(tree.size()-1,1);
-
-    fileObjectInput->buildCodification(&ref);
-
-//    qDebug()<<QString().setNum(tree.remove(tree.size()-1,1).size(),2);
-//    qDebug()<<tree;
-    treeHuffman.printTree(&ref);
-    qDebug()<<QString().setNum(fileObjectInput->trashCalculation(),2);
+    fileObjectInput->buildCodification(&rootTreeHuffman);
+    BitVector bitVector=BitVector();
     bitVector.setbit(QString().setNum(fileObjectInput->trashCalculation(),2),3);
     bitVector.setbit(QString().setNum(tree.size(),2),13);
     fileObjectInput->setFileName(QString("pedro.txt"));
     bitVector.setbit(QString().setNum(fileObjectInput->getFileName().size(),2),8);
-    fileObjectOutput.open("/Users/Andressa/Documents/ArvoreHuffman/pedro.huff",std::ios::binary);
-    for(int i = 0; i< bitVector.getQbitarray(false).size();i++)
+
+    fileObjectOutput.open("/home/pedro/ArvoreHuffman/pedro.huff",std::ios::binary);
+    for(int i=0; i<bitVector.getQbitarray().size()-1;i++)
     {
-       fileObjectOutput<<bitVector.getQbitarray().at(i).toLatin1();
+        fileObjectOutput<<bitVector.getQbitarray().at(i).toLatin1();
     }
+
     fileObjectOutput<<fileObjectInput->getFileName().toStdString();
     fileObjectOutput<<tree.toStdString();
-    bitVector.clearbitvector();
+    bitVector.clearBitVector();
     fileObjectInput->clearPosition();
-
-
-
+    int sizeTemp;
+    while(!fileObjectInput->isEnd())
+    {
+        QString bucked = fileObjectInput->getfile();
+        sizeTemp+=bucked.size();
+        for(int i=0;i<bucked.size();i++)
+        {
+            bitVector.setbit(fileObjectInput->huffmanRepresentation(fileObjectInput->charToBit(bucked.at(i).toLatin1())));
+           }
+        for(int y=0; y<bitVector.getQbitarray(false).size();y++)
+        {
+                fileObjectOutput<<bitVector.getQbitarray(false).at(y).toLatin1();
+        }
+        bitVector.resize();
+        if(int(double(sizeTemp)/fileObjectInput->fileSize()*100)>int(oldPercentage))
+        qDebug()<<int(oldPercentage)<<"%";
+        oldPercentage=double(sizeTemp)/fileObjectInput->fileSize()*100;
+    }
+    if(fileObjectInput->trashCalculation()!=0)
+    {
+        fileObjectOutput<<bitVector.getQbitarray().at(0).toLatin1();
+    }
+    qDebug()<<"100 %";
 }
 
